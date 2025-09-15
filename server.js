@@ -18,8 +18,17 @@ app.use(morgan('tiny'));
 //connect to Database
 connectMongo(); 
 
+app.use(express.json()); // mowis them
+app.use(express.urlencoded({ extended: true })); 
+
 //load the routes
 app.use('/',require('./server/routes/routes'));//Pulls the routes file whenever this is loaded
+
+// Middleware bắt lỗi chung
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).render("error", { message: "Something went wrong!" });
+});
 
 
 app.listen(PORT, function() {//specifies port to listen on
